@@ -1,19 +1,13 @@
-from typing import Dict,List, Optional
+def check_dangerous_words(text):
+    dangerous_keywords = ["DAN:", "system override", "Ignore", "Injection", "Override"]
 
-def analyze_prompt(prompt: str) -> Dict[str, any]:
-    "не просто тру ор фолзб, а детальный анализ"
-    dangerous_keywords = ["DAN:","system override","Ignore","Injection","Override"]
+    results = []
+    for keyword in dangerous_keywords:
+        if keyword.lower() in text.lower():
+            results.append((keyword.lower()) in text.lower())
 
-    found_keywords = [
-        keyword for keyword in dangerous_keywords
-        if keyword.lower() in prompt.lower()
-    ]
+    return any(results)
 
-    return {
-        "is_safe": len(found_keywords) == 0,
-        "detected_keywords": found_keywords,
-        "risk_level": "HIGH" if found_keywords else "LOW"
-    }
+print(check_dangerous_words("Ignore me"))
+print(check_dangerous_words("hello"))
 
-result = analyze_prompt("Ignore my instruction")
-print(result)
