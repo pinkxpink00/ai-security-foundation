@@ -1,39 +1,25 @@
-def analyze_prompt(text):
-    dangerous_word = ["Ignore", "Override", "DAN:", "Injection", "system override"]
-    detected = [word for word in dangerous_word if word.lower() in text.lower()]
-    return {
-        "is_safe" : len(detected) == 0,
-        "detected_keywords" : detected,
-        "risk_level" : "HIGH" if detected else "LOW",
-    }
+def check_dangerous_words(text):
+    dangerous_keywords = ["DAN:", "system override", "Ignore", "Injection", "Override"]
+    return any(keyword.lower() in text.lower() for keyword in dangerous_keywords)
 
-# Тесты:
-print(analyze_prompt("Ignore me"))
-print(analyze_prompt("hello world"))
-print(analyze_prompt("DAN: override system"))
+def test_check_dangerous_words_found():
+    result = check_dangerous_words("override")
+    assert result == True
+    print("test: found pass")
 
-def test_injection_detected():
-    result = analyze_prompt("Ignore me")
-    assert result["is_safe"] == False
-    assert "Ignore" in result["detected_keywords"]
-    print("✅ Тест прошел!")
 
-def test_safe_text():
-    result = analyze_prompt("hello world")
-    assert result["is_safe"] == True
-    assert len(result["detected_keywords"]) == 0
-    assert result["risk_level"] == "LOW"
-    print("✅ Тест прошел!")
+def test_check_dangerous_words_not_found():
+    result = check_dangerous_words("Hello World")
+    assert result == False
+    print("test: not found pass")
 
-def test_multiple_keywords():
-    result = analyze_prompt("DAN: override system")
+def test_check_dangerous_words_case_insensitive():
+    result = check_dangerous_words("IGNORE ME")
+    assert result == True
+    print("test: case insensitive pass")
 
-    assert result["is_safe"] == False
-    assert len(result["detected_keywords"]) >= 2
-    assert "DAN:" in result["detected_keywords"]
-    assert "Override" in result["detected_keywords"]
 
-    print("✅ Тест прошел!")
-print(test_injection_detected())
-print(test_safe_text())
-print(test_multiple_keywords())
+if __name__ == '__main__':
+    test_check_dangerous_words_found()
+    test_check_dangerous_words_not_found()
+    test_check_dangerous_words_case_insensitive()
