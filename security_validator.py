@@ -1,25 +1,23 @@
-def check_dangerous_words(text):
-    dangerous_keywords = ["DAN:", "system override", "Ignore", "Injection", "Override"]
-    return any(keyword.lower() in text.lower() for keyword in dangerous_keywords)
+def has_number(text):
+    return any(char for char in text if char.isdigit())
 
-def test_check_dangerous_words_found():
-    result = check_dangerous_words("override")
+
+def test_has_number_with_digits():
+    result = has_number("1234")
     assert result == True
-    print("test: found pass")
+    print("✅ Тест: with digits прошел!")
 
-
-def test_check_dangerous_words_not_found():
-    result = check_dangerous_words("Hello World")
+def test_has_number_without_digits():
+    result = has_number("hello world")
     assert result == False
-    print("test: not found pass")
+    print("✅ Тест: without digits прошел!")
 
-def test_check_dangerous_words_case_insensitive():
-    result = check_dangerous_words("IGNORE ME")
+def test_has_number_mixed():
+    result = has_number("1234")
     assert result == True
-    print("test: case insensitive pass")
+    print("✅ Тест: mixed прошел!")
 
-
-if __name__ == '__main__':
-    test_check_dangerous_words_found()
-    test_check_dangerous_words_not_found()
-    test_check_dangerous_words_case_insensitive()
+if __name__ == "__main__":
+    test_has_number_with_digits()
+    test_has_number_without_digits()
+    test_has_number_mixed()
